@@ -1,0 +1,73 @@
+﻿trigger:
+- main 
+
+pool:
+  vmImage: 'windows-latest' 
+
+variables:
+  solution: '**/*.sln'  
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  dockerImageName: 'yourdockerhubusername/jediorderapi'  # Docker Hub image name
+  sonarCloudOrganization: 'your-sonarcloud-organization'  # SonarCloud organization name
+  sonarCloudProjectKey: 'your-sonarcloud-project-key'  # SonarCloud project key
+  sonarCloudToken: $(SONAR_TOKEN)  # SonarCloud token from pipeline secrets
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet packages'
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the solution'
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: 'SonarCloud'  # Service connection for SonarCloud
+    organization: '$(sonarCloudOrganization)'
+    projectKey: '$(sonarCloudProjectKey)'
+    projectName: 'JediOrderApi'  # Your project name
+    sources: '$(System.DefaultWorkingDirectory)'  # Path to source code
+    extraProperties: |
+      sonar.exclusions=**/*.Tests/**/*   # Exclude test files from analysis
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests'
+  inputs:
+    command: 'test'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration) --no-build --verbosity normal'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish SonarCloud analysis results'
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: Docker@2
+  displayName: 'Build Docker Image'
+  inputs:
+    command: 'buildAndPush'
+    repository: '$(dockerImageName)'
+    dockerfile: '**/Dockerfile'
+    containerRegistry: 'DockerHub'  # Azure DevOps service connection for Docker Hub
+    tags: |
+      $(Build.BuildId)
+      latest
+
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure Web App'
+  inputs:
+    azureSubscription: 'YourAzureSubscription'  # Replace with your Azure subscription
+    appType: 'webApp'
+    WebAppName: 'JediOrder' 
+    package: '$(Pipeline.Workspace)/**/*.zip'
