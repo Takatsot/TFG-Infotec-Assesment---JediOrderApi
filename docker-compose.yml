@@ -1,0 +1,31 @@
+version: '3.4'
+
+networks:
+  jediorderapi:
+
+services:
+  db:
+    container_name: jediorderdb
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"  # Host port 1433 maps to container port 1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=password123$  
+    networks:
+      - jediorderapi
+
+  jediapi:
+    container_name: jediorderapi
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    ports:
+      - "5000:80"  # Host port 5000 maps to container port 80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+      - ConnectionStrings__DefaultConnection=Server=db;Database=YourDatabaseName;User=sa;Password=password123$;
+    depends_on:
+      - db
+    networks:
+      - jediorderapi
