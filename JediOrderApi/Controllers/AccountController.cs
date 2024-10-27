@@ -15,13 +15,11 @@ namespace JediOrderApi.Controllers
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
-        private readonly ILogger<AccountController> _logger;
 
         public AccountController(SignInManager<AppUser> signInManager, IMapper mapper, ILogger<AccountController> logger)
         {
             _signInManager = signInManager;
             _mapper = mapper;
-            _logger = logger;
         }
 
         /// <summary>
