@@ -17,55 +17,54 @@ Welcome to the **JediOrder REST API**! This API powers Chalmun’s cantina on Ta
 
 ### Completed Work
 
-#### AccountController Overview (Tested)
+#### AccountController Overview
 **Key Features:**
-- **Sign Up:** (Tested)  
+- **Sign Up:**  
   Registers a new user account.
-- **Sign In:** (Tested)  
+- **Sign In:**   
   Authenticates a user and generates a JWT token for secure access.
 
-#### ProductsController Overview (Partially Tested)
+#### ProductsController Overview
 **Key Features:**
-- **Search Products:** (Tested)  
+- **Search Products:**  
   Retrieves products based on a search query or fetches all products if no query is provided.
-- **Add a Product:** (Tested)  
+- **Add a Product:**  
   Adds a new product entry (requires authentication).
-- **Get Product Details:** (Tested)  
+- **Get Product Details:**   
   Retrieves detailed information for a specific product by ID.
-- **Update a Product:** (Tested)  
+- **Update a Product:**   
   Modifies an existing product.
-- **Delete a Product:** (Tested)  
+- **Delete a Product:**   
   Removes a product by its ID.
-- **Get Reviews for a Product:** (Untested)  
+- **Get Reviews for a Product:**  
   Retrieves all reviews for a specific product.
-- **Add a Review for a Product:** (Untested)  
+- **Add a Review for a Product:**  
   Allows users to add reviews (requires authentication).
 
-#### Security and Functionality (Tested)
+#### Security and Functionality
 - Implements user authentication for secure access across controllers.
 - Supports complete management of accounts and products.
 
-#### Performance Optimization (Task 3)
-- **Optimized for High Traffic**: Since the API is running on legacy hardware, performance improvements were implemented to handle increased load without hardware upgrades:
-  - **Caching**: Implemented in-memory caching for frequently accessed data, reducing repeated database queries.
-  - **Database Indexing**: Indexed frequently queried fields to improve query speed and reduce database load.
-  - **Connection Pooling**: Enabled connection pooling to optimize database connection management.
-  - **Async Patterns**: Leveraged asynchronous methods across the API to allow concurrent request handling, maximizing responsiveness.
-  - **Response Compression**: Enabled Gzip compression for API responses to reduce payload size and improve network efficiency.
+#### Performance Optimization
+- **Async Patterns**: Uses asynchronous methods to handle concurrent requests, enhancing responsiveness.
 
 ---
 
 ## Future Work
 
-### Pending Tasks (Trials)
+### Pending Tasks
+Since the API operates on legacy hardware, these performance improvements were implemented to handle increased load:
+- **Caching**: In-memory caching for frequently accessed data reduces the need for repeated database queries.
+- **Database Indexing**: Frequently queried fields are indexed to improve query speed and reduce database load.
+- **Connection Pooling**: Connection pooling optimizes database connection management.
+- **Response Compression**: Gzip compression is enabled for API responses to reduce payload size and improve network efficiency.
 
-#### Task 4 (Above and Beyond)
+#### (Above and Beyond)
 - **Review Management Dashboard**: Chalmun desires a dashboard to view and manage all reviews, providing insights into customer feedback and quality control.
 - **Rate Limiting**: Implement rate-limiting to prevent abuse from excessive review submissions.
 - **OAuth2 SSO**: Enable user login with Google or other OAuth2 providers for added security and convenience.
 
 ### Additional Scalability Recommendations
-
 For future scalability, should traffic exceed current optimizations:
 - **Load Balancing**: Distribute requests across multiple servers to enhance response times and reliability.
 - **Database Sharding**: Split large datasets across multiple databases for optimized data retrieval.
@@ -90,14 +89,6 @@ Logging is currently configured to console output. For production, centralized l
 ---
 
 ## Recommendations
-
-For Task 3, which involved optimizing performance on legacy hardware, these solutions were implemented:
-- **Caching**: Reduced load by storing frequently requested data in memory.
-- **Database Indexing**: Improved query performance.
-- **Connection Pooling**: Enhanced database connection efficiency.
-- **Async Patterns**: Improved responsiveness by using asynchronous methods.
-- **Response Compression**: Minimized network load with compressed responses.
-
 For future scalability beyond current optimizations, consider:
 - **Load Balancing**: Distribute traffic to improve speed and reliability.
 - **Database Sharding**: Divide large datasets for faster access.
